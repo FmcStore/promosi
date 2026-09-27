@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="id">
+<!-- FmcComic launch opener — built with Bang Motion skill v1.19.0 (MIT) — kolase ritmis · 8 adegan · maskot kucing-bubble + dinding cover + UI reader · buka: ledakan tinta · tutup: logo + fmccomic.my.id -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FmcComic — Introducing FmcComic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+:root{
+  --amber:#f59e0b; --amber-lit:#fbbf24; --amber-deep:#b45309;
+  --base:#0b0b0f; --ink:#000000; --cream:#FFF6D1; --char:#3D3F43; --paper:#f5edd0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:"Space Grotesk",system-ui,sans-serif;color:#fff}
+#stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(1);overflow:hidden;background:var(--base)}
+#world{position:absolute;inset:0;will-change:transform}
+#bgbase{position:absolute;inset:-120px;background:
+  radial-gradient(60% 45% at 50% 108%, rgba(245,158,11,.34), rgba(245,158,11,.10) 45%, transparent 70%),
+  linear-gradient(135deg,#0b0b0f 30%,#171106 62%,#0b0b0f 100%)}
+#halftone{position:absolute;inset:0;opacity:.5;background-image:radial-gradient(rgba(245,158,11,.20) 2.2px, transparent 2.6px);background-size:26px 26px;mask-image:radial-gradient(90% 90% at 50% 50%, transparent 40%, #000 100%)}
+#grain{position:absolute;inset:0;opacity:.10;background-image:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
+#speed{position:absolute;left:50%;top:50%;width:2600px;height:2600px;margin:-1300px 0 0 -1300px;opacity:0;
+  background:repeating-conic-gradient(from 0deg, rgba(255,246,209,.16) 0deg 1.1deg, transparent 1.1deg 5deg);
+  -webkit-mask-image:radial-gradient(circle, transparent 22%, #000 60%);mask-image:radial-gradient(circle, transparent 22%, #000 60%)}
+.vignette{position:absolute;inset:0;pointer-events:none;z-index:30;background:linear-gradient(180deg,rgba(0,0,0,.5),transparent 28%),radial-gradient(ellipse 80% 70% at 50% 52%,transparent 42%,rgba(0,0,0,.55) 88%,rgba(0,0,0,.9) 100%)}
+#dom{position:absolute;inset:0}
+.beat{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden}
+.hero{font-family:"Bangers",cursive;font-weight:400;letter-spacing:.02em;color:#fff;text-shadow:0 6px 0 rgba(0,0,0,.55),0 0 60px rgba(245,158,11,.35);white-space:nowrap;line-height:.95}
+.hero.sm{font-size:84px}.hero.md{font-size:120px}.hero.lg{font-size:170px}.hero.xl{font-size:215px}
+.hero.cream{color:var(--cream)}.hero.ink{color:#111;text-shadow:none}
+.sub{font-size:34px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-lit)}
+.sub.cream{color:#7a6a3a}.label{font-size:26px;letter-spacing:.2em;color:#ffe9b0;opacity:.9}
+.wd{display:inline-block;white-space:nowrap}.ch{display:inline-block;will-change:transform,opacity;opacity:0}
+.kicker{display:inline-block;font-size:30px;font-weight:700;letter-spacing:.3em;color:#0b0b0f;background:var(--amber);padding:10px 26px;border-radius:999px;transform:rotate(-3deg);box-shadow:6px 6px 0 #000}
+.bubble{position:absolute;background:var(--cream);color:#111;border:5px solid #000;border-radius:26px;padding:18px 30px;font-weight:700;font-size:34px;box-shadow:8px 8px 0 #000}
+.bubble:after{content:"";position:absolute;left:60px;bottom:-26px;width:34px;height:34px;background:var(--cream);border-right:5px solid #000;border-bottom:5px solid #000;transform:rotate(45deg) skew(12deg,12deg)}
+.tag{font-weight:700;font-size:30px;letter-spacing:.12em;padding:12px 26px;border-radius:14px;border:4px solid #000;box-shadow:6px 6px 0 #000;transform:rotate(-4deg)}
+.mascot{width:460px;height:460px;filter:drop-shadow(0 18px 0 rgba(0,0,0,.5))}
+.panelrow{display:flex;gap:26px}
+.mpanel{width:420px;height:560px;background:var(--cream);border:6px solid #000;box-shadow:10px 10px 0 #000;border-radius:10px;position:relative;overflow:hidden}
+.mpanel .art{position:absolute;inset:0}
+.coverwall{display:flex;gap:22px}
+.cover{width:230px;height:340px;border:5px solid #000;border-radius:12px;box-shadow:8px 8px 0 #000;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;font-weight:700;position:relative;overflow:hidden}
+.cover b{font-family:"Bangers";font-size:44px;letter-spacing:.03em}
+.cover span{font-size:20px;letter-spacing:.15em}
+.phone{width:430px;height:820px;background:#111;border:8px solid #000;border-radius:44px;box-shadow:12px 12px 0 #000, 0 0 90px rgba(245,158,11,.35);overflow:hidden;position:relative}
+.phone .bar{height:64px;background:var(--amber);display:flex;align-items:center;gap:12px;padding:0 22px;color:#111;font-weight:700;font-size:26px}
+.phone .page{margin:18px;border-radius:14px;border:4px solid #000;overflow:hidden}
+.desk{width:760px;height:520px;background:#141414;border:8px solid #000;border-radius:22px;box-shadow:12px 12px 0 #000;overflow:hidden;position:relative}
+.desk .bar{height:56px;background:var(--amber);display:flex;align-items:center;padding:0 24px;color:#111;font-weight:700;font-size:24px}
+#wipe{position:absolute;inset:-200px;z-index:25;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 50%, #000 42%, transparent 72%)}
+#inksplash{position:absolute;left:50%;top:50%;width:1600px;height:1600px;margin:-800px 0 0 -800px;z-index:24;opacity:0;pointer-events:none}
+#ui{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:none;align-items:center;gap:14px;padding:11px 18px;border-radius:16px;background:rgba(14,16,22,.9);border:1px solid rgba(255,255,255,.1);font-size:13px;color:#A0A6B4;z-index:50}
+#ui.on{display:flex}
+#ui button{background:#262A34;color:#fff;border:none;padding:8px 16px;border-radius:9px;font:inherit;cursor:pointer}
+#scrub{width:340px;accent-color:var(--amber)}
+#clock{font-variant-numeric:tabular-nums;min-width:5.2ch;text-align:right}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="world">
+    <div id="bgbase"></div><div id="halftone"></div><div id="speed"></div><div id="grain"></div>
+    <div id="dom">
+      <!-- B1 -->
+      <div class="beat" id="b1">
+        <svg class="mascot" id="mascot1" viewBox="0 0 400 400"><ellipse cx="200" cy="180" rx="150" ry="130" fill="#000"/><ellipse cx="330" cy="300" rx="26" ry="20" fill="#000"/><path d="M120 150 L150 105 L180 148 L210 100 L245 146" fill="none" stroke="#FFF6D1" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M130 200 Q160 230 195 205" fill="none" stroke="#FFF6D1" stroke-width="13" stroke-linecap="round"/><path d="M245 190 Q265 185 250 210" fill="none" stroke="#FFF6D1" stroke-width="13" stroke-linecap="round"/></svg>
+        <div style="text-align:center;margin-left:40px">
+          <span class="kicker" id="k1">Introducing</span>
+          <h1 class="hero xl" id="h1"><span class="txt">FmcComic</span></h1>
+          <div class="sub" id="s1"><span class="txt">Temukan cerita favoritmu</span></div>
+        </div>
+      </div>
+      <!-- B2 panels -->
+      <div class="beat" id="b2">
+        <div class="panelrow" id="panels">
+          <div class="mpanel"><div class="art" style="background:linear-gradient(180deg,#FFF6D1,#f3df9a)"></div><div style="position:absolute;left:24px;top:24px" class="tag" id="tg-act">ACTION</div><svg viewBox="0 0 200 300" style="position:absolute;inset:60px 20px 20px"><path d="M40 260 L150 60" stroke="#000" stroke-width="14"/><circle cx="150" cy="60" r="26" fill="#f59e0b" stroke="#000" stroke-width="8"/></svg></div>
+          <div class="mpanel" style="transform:rotate(2deg)"><div class="art" style="background:linear-gradient(180deg,#1a1a1a,#3a2a08)"></div><div style="position:absolute;left:24px;top:24px;background:#f59e0b" class="tag">ISEKAI</div><div class="hero md cream" style="position:absolute;left:30px;bottom:30px;font-size:90px">SLASH!</div></div>
+          <div class="mpanel" style="transform:rotate(-2deg)"><div class="art" style="background:linear-gradient(180deg,#FFF6D1,#ffd9a0)"></div><div style="position:absolute;left:24px;top:24px;background:#fff" class="tag">ROMANCE</div><div style="position:absolute;right:30px;bottom:40px" class="bubble" id="bub2">Doki…</div></div>
+        </div>
+        <div style="position:absolute;bottom:90px;text-align:center"><h2 class="hero lg" id="h2"><span class="txt">Chapter baru setiap hari</span></h2></div>
+      </div>
+      <!-- B3 cover wall -->
+      <div class="beat" id="b3">
+        <div style="text-align:center">
+          <h2 class="hero lg" id="h3"><span class="txt">Ribuan judul populer</span></h2>
+          <div class="coverwall" id="wall" style="margin-top:36px">
+            <div class="cover" style="background:linear-gradient(180deg,#ff5a5a,#7a0d0d);color:#fff"><b>OROCHI</b><span>ACTION</span></div>
+            <div class="cover" style="background:linear-gradient(180deg,#9b7bff,#2a1666);color:#fff"><b>MANA</b><span>FANTASY</span></div>
+            <div class="cover" style="background:linear-gradient(180deg,#ffb3c8,#8a2b4a);color:#fff"><b>SAKURA</b><span>ROMANCE</span></div>
+            <div class="cover" style="background:linear-gradient(180deg,#7bffcf,#0b5c46);color:#06281f"><b>PORTAL</b><span>ISEKAI</span></div>
+            <div class="cover" style="background:linear-gradient(180deg,#ffe27b,#8a5b00);color:#231600"><b>MURIM</b><span>MURIM</span></div>
+            <div class="cover" style="background:linear-gradient(180deg,#FFF6D1,#e8cf7e);color:#111"><b>+999</b><span>MANGA • MANHWA • MANHUA</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- B4 reader -->
+      <div class="beat" id="b4">
+        <div class="phone" id="phoneui">
+          <div class="bar">◀ FmcComic • Ch. 128</div>
+          <div class="page" style="height:280px;background:linear-gradient(180deg,#FFF6D1,#f0d47a)"></div>
+          <div class="page" id="readerpage" style="height:280px;background:linear-gradient(180deg,#1c1c22,#4a3208)"></div>
+          <div style="display:flex;gap:12px;margin:0 18px"><div style="flex:1;text-align:center;background:#f59e0b;border-radius:12px;padding:12px;font-weight:700;color:#111" id="tapbtn">TAP TO READ</div><div style="width:64px;text-align:center;background:#fff;border-radius:12px;padding:12px;font-size:26px" id="bmbtn">🔖</div></div>
+        </div>
+        <div style="margin-left:70px;max-width:800px"><span class="kicker">Momen istimewa</span><h2 class="hero lg" id="h4"><span class="txt">Baca nyaman tanpa ribet</span></h2><div class="label" id="l4"><span class="txt">CLEAN • FAST • MOBILE-FRIENDLY</span></div></div>
+      </div>
+      <!-- B5 library -->
+      <div class="beat" id="b5">
+        <div style="text-align:center"><span class="kicker" id="k5">Update cepat & berkala</span>
+          <h2 class="hero xl" id="h5"><span class="txt">Unlock chapter 129</span></h2>
+          <div class="panelrow" id="chips" style="justify-content:center;margin-top:30px">
+            <div class="tag" style="background:#f59e0b">CH 126 ✓</div><div class="tag" style="background:#fff">CH 127 ✓</div><div class="tag" style="background:#FFF6D1">CH 128 ✓</div><div class="tag" id="chnew" style="background:#000;color:#f59e0b;border-color:#f59e0b">CH 129 ★ NEW</div>
+          </div>
+        </div>
+      </div>
+      <!-- B6 devices -->
+      <div class="beat" id="b6">
+        <div class="desk" id="deskmock"><div class="bar">● ● ● &nbsp; fmccomic.my.id — Baca Komik Gratis</div><div style="display:flex;gap:14px;padding:18px"><div style="flex:1;height:300px;border-radius:12px;background:linear-gradient(180deg,#FFF6D1,#e9cf7a);border:4px solid #000"></div><div style="flex:1;height:300px;border-radius:12px;background:linear-gradient(180deg,#23232c,#5c430f);border:4px solid #000"></div><div style="flex:1;height:300px;border-radius:12px;background:linear-gradient(180deg,#ffd9e6,#a04a68);border:4px solid #000"></div></div></div>
+        <div style="margin-left:60px"><h2 class="hero lg" id="h6"><span class="txt">Gratis kapan saja</span></h2><h2 class="hero md cream" id="h6b"><span class="txt">di mana saja</span></h2></div>
+      </div>
+      <!-- B7 montage -->
+      <div class="beat" id="b7">
+        <div style="text-align:center"><h2 class="hero xl" id="h7"><span class="txt">MANGA • MANHWA • MANHUA</span></h2><div class="sub" id="s7"><span class="txt">Aksi • Fantasi • Romansa • Isekai • Murim</span></div></div>
+      </div>
+      <!-- B8 endcard -->
+      <div class="beat" id="b8">
+        <div style="text-align:center">
+          <svg class="mascot" id="mascot8" viewBox="0 0 400 400" style="width:300px;height:300px;margin:0 auto"><ellipse cx="200" cy="180" rx="150" ry="130" fill="#000"/><ellipse cx="330" cy="300" rx="26" ry="20" fill="#000"/><path d="M120 150 L150 105 L180 148 L210 100 L245 146" fill="none" stroke="#FFF6D1" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M130 200 Q160 230 195 205" fill="none" stroke="#FFF6D1" stroke-width="13" stroke-linecap="round"/><path d="M245 190 Q265 185 250 210" fill="none" stroke="#FFF6D1" stroke-width="13" stroke-linecap="round"/></svg>
+          <h1 class="hero xl" id="h8"><span class="txt">FmcComic</span></h1>
+          <div class="sub" id="s8"><span class="txt">Platform baca manga, manhwa & manhua online</span></div>
+          <div class="hero md" id="url8" style="color:var(--amber)"><span class="txt">fmccomic.my.id</span></div>
+          <div class="label" id="l8"><span class="txt">BACA KOMIK FAVORITMU GRATIS DI FMCCOMIC</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg id="inksplash" viewBox="0 0 800 800"><g fill="#000"><circle cx="400" cy="400" r="180"/><circle cx="240" cy="300" r="60"/><circle cx="570" cy="260" r="80"/><circle cx="600" cy="540" r="55"/><circle cx="230" cy="550" r="70"/><circle cx="400" cy="150" r="40"/><circle cx="150" cy="420" r="34"/><circle cx="660" cy="400" r="42"/></g></svg>
+  <div id="wipe"></div>
+  <div class="vignette"></div>
+</div>
+<div id="ui"><button id="btn-play">Pause</button><button id="btn-restart">Restart</button><input id="scrub" type="range" min="0" max="1000" value="0"><span id="clock">0.00s</span></div>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+function splitChars(el){const words=(el.textContent||'').split(' ');el.textContent='';const out=[];words.forEach((w,i)=>{const wr=document.createElement('span');wr.className='wd';for(const c of w){const s=document.createElement('span');s.className='ch';s.textContent=c;wr.appendChild(s);out.push(s);}el.appendChild(wr);if(i<words.length-1){const sp=document.createElement('span');sp.className='ch';sp.innerHTML='&nbsp;';el.appendChild(sp);out.push(sp);}});return out;}
+const Q=new URLSearchParams(location.search);
+const DURATION=30;
+const tl=gsap.timeline({paused:true});
+const rig=$('#world');
+const inUp=(ch,el,at,o={})=>{tl.fromTo(ch,{opacity:0,yPercent:60},{opacity:1,yPercent:0,duration:o.dur||.8,ease:'power4.out',stagger:o.st||.024,immediateRender:false},at);};
+const inLeft=(ch,el,at,o={})=>{tl.fromTo(ch,{opacity:0,xPercent:-45},{opacity:1,xPercent:0,duration:o.dur||.75,ease:'power4.out',stagger:o.st||.02,immediateRender:false},at);};
+const inDepth=(ch,el,at,o={})=>{tl.fromTo(ch,{opacity:0,scale:2.4},{opacity:1,scale:1,duration:o.dur||1,ease:'expo.out',stagger:{each:o.st||.018,from:'center'},immediateRender:false},at);};
+const inWords=(ch,el,at,o={})=>{const w=el.querySelectorAll('.wd');tl.set(ch,{opacity:1,xPercent:0,yPercent:0,scale:1},at);tl.fromTo(w,{opacity:0,yPercent:40,rotateX:-55},{opacity:1,yPercent:0,rotateX:0,duration:o.dur||.6,ease:'back.out(1.6)',stagger:o.st||.14,immediateRender:false},at);};
+const outFast=(ch,at)=>{tl.to(ch,{opacity:0,yPercent:-60,duration:.35,ease:'power2.in',stagger:.008},at);};
+const show=(id,at)=>tl.set(id,{autoAlpha:1},at);
+const hide=(id,at)=>tl.set(id,{autoAlpha:0},at);
+const wipe=(at,dur=.55)=>{tl.fromTo('#inksplash',{opacity:1,scale:.2,rotate:0},{opacity:1,scale:1.25,rotate:25,duration:dur,ease:'power3.in',immediateRender:false},at);tl.to('#inksplash',{opacity:0,duration:.15},at+dur);};
+// rig napas dasar + speedlines
+tl.set(rig,{transformOrigin:'50% 50%'},0);
+tl.fromTo(rig,{scale:1},{scale:1.06,duration:DURATION,ease:'sine.inOut',immediateRender:false},0);
+tl.fromTo('#speed',{opacity:0,rotate:0},{opacity:.9,rotate:120,duration:DURATION,ease:'none',immediateRender:false},0);
+// split semua teks
+const S={};['#h1','#s1','#h2','#h3','#h4','#l4','#h5','#h6','#h6b','#h7','#s7','#h8','#s8','#url8','#l8'].forEach(s=>{const t=$(s+' .txt');if(t)S[s]=splitChars(t);});
+// B1 0-3.2
+show('#b1',0);tl.fromTo('#mascot1',{scale:0,rotate:-30,transformOrigin:'50% 50%'},{scale:1,rotate:0,duration:.9,ease:'back.out(1.7)',immediateRender:false},.1);
+tl.fromTo('#k1',{opacity:0,y:40},{opacity:1,y:0,duration:.5,ease:'power4.out',immediateRender:false},.4);
+inDepth(S['#h1'],$('#h1'),.55);inWords(S['#s1'],$('#s1'),1.5);
+tl.to(rig,{x:-40,duration:3.2,ease:'sine.inOut'},0);
+wipe(2.75);hide('#b1',3.0);
+// B2 3.0-6.5
+show('#b2',3.0);tl.fromTo('#panels .mpanel',{y:700,rotate:8},{y:0,rotate:(i)=>[-2,2,-2][i]||0,duration:.8,ease:'power4.out',stagger:.12,immediateRender:false},3.0);
+inUp(S['#h2'],$('#h2'),3.6);tl.fromTo('#bub2',{scale:0,transformOrigin:'20% 100%'},{scale:1,duration:.5,ease:'back.out(2)',immediateRender:false},4.6);
+tl.to(rig,{x:40,scale:1.1,duration:3.5,ease:'sine.inOut'},3.0);
+outFast(S['#h2'],6.0);wipe(6.05);hide('#b2',6.3);
+// B3 6.3-10.3
+show('#b3',6.3);tl.fromTo('#wall .cover',{y:500,rotate:6},{y:0,rotate:0,duration:.7,ease:'power4.out',stagger:.09,immediateRender:false},6.3);
+inLeft(S['#h3'],$('#h3'),6.5);tl.to('#wall',{x:-120,duration:4,ease:'sine.inOut'},6.3);
+tl.to(rig,{x:0,scale:1.04,duration:4,ease:'sine.inOut'},6.3);
+outFast(S['#h3'],9.8);wipe(9.85);hide('#b3',10.1);
+// B4 10.1-14.3 momen istimewa: dive via bubble
+show('#b4',10.1);tl.fromTo(rig,{scale:1.04},{scale:1.5,duration:.6,ease:'power2.in',immediateRender:false},10.1);
+tl.fromTo('#phoneui',{scale:.6,y:120},{scale:1,y:0,duration:.9,ease:'power4.out',immediateRender:false},10.5);
+inUp(S['#h4'],$('#h4'),10.8);inWords(S['#l4'],$('#l4'),11.8);
+tl.fromTo('#tapbtn',{scale:1},{scale:1.12,duration:.3,yoyo:true,repeat:3,ease:'sine.inOut'},12.2);
+tl.fromTo('#readerpage',{x:0},{x:-60,duration:.8,ease:'power3.inOut'},13.0);
+tl.to(rig,{scale:1.08,x:60,duration:4,ease:'sine.inOut'},10.7);
+outFast(S['#h4'],13.8);wipe(13.9);hide('#b4',14.15);
+// B5 14.15-18
+show('#b5',14.15);inDepth(S['#h5'],$('#h5'),14.3);
+tl.fromTo('#chips .tag',{scale:0,y:80},{scale:1,y:0,duration:.55,ease:'back.out(1.8)',stagger:.12,immediateRender:false},14.8);
+tl.fromTo('#k5',{opacity:0,y:30},{opacity:1,y:0,duration:.5,ease:'power4.out',immediateRender:false},14.2);
+tl.fromTo('#chnew',{rotate:-8,scale:1},{rotate:4,scale:1.15,duration:.5,yoyo:true,repeat:3,ease:'sine.inOut'},16.0);
+tl.to(rig,{x:-50,scale:1.05,duration:3.8,ease:'sine.inOut'},14.15);
+outFast(S['#h5'],17.5);wipe(17.6);hide('#b5',17.85);
+// B6 17.85-22
+show('#b6',17.85);tl.fromTo('#deskmock',{x:-700},{x:0,duration:.8,ease:'power4.out',immediateRender:false},17.9);
+inLeft(S['#h6'],$('#h6'),18.2);inUp(S['#h6b'],$('#h6b'),19.0);
+tl.to(rig,{x:50,scale:1.1,duration:4.1,ease:'sine.inOut'},17.85);
+outFast(S['#h6'],21.4);outFast(S['#h6b'],21.5);wipe(21.6);hide('#b6',21.85);
+// B7 21.85-25.8 montase kilat
+show('#b7',21.85);inDepth(S['#h7'],$('#h7'),22.0,{dur:.7});inWords(S['#s7'],$('#s7'),22.9);
+tl.fromTo(rig,{scale:1.1},{scale:1.25,duration:1,ease:'power2.in',immediateRender:false},21.85);
+tl.to(rig,{scale:1.05,duration:2.9,ease:'sine.out'},22.85);
+outFast(S['#h7'],25.3);wipe(25.4);hide('#b7',25.65);
+// B8 25.65-30 endcard
+show('#b8',25.65);tl.fromTo('#mascot8',{scale:0,rotate:20,transformOrigin:'50% 50%'},{scale:1,rotate:0,duration:.8,ease:'back.out(1.7)',immediateRender:false},25.7);
+inUp(S['#h8'],$('#h8'),26.0);inWords(S['#s8'],$('#s8'),26.8);inUp(S['#url8'],$('#url8'),27.6);inWords(S['#l8'],$('#l8'),28.3);
+tl.to(rig,{x:0,scale:1.02,duration:4.3,ease:'sine.inOut'},25.65);
+tl.to({},{duration:.01},DURATION);
+const stage=$('#stage');
+const fit=()=>{const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;};
+addEventListener('resize',fit);fit();
+const clock=$('#clock'),scrub=$('#scrub'),btn=$('#btn-play');
+let scrubbing=false;
+(function frame(){const t=tl.time();clock.textContent=t.toFixed(2)+'s';if(!scrubbing)scrub.value=String(t/DURATION*1000);requestAnimationFrame(frame);})();
+const toggle=()=>{if(tl.paused()||tl.progress()>=1){if(tl.progress()>=1)tl.progress(0);tl.play();btn.textContent='Pause';}else{tl.pause();btn.textContent='Play';}};
+btn.onclick=toggle;$('#btn-restart').onclick=()=>{tl.pause(0);tl.play();btn.textContent='Pause';};
+scrub.addEventListener('pointerdown',()=>{scrubbing=true;tl.pause();btn.textContent='Play';});
+addEventListener('pointerup',()=>scrubbing=false);
+scrub.addEventListener('input',()=>{tl.pause();tl.time(scrub.value/1000*DURATION);});
+addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();toggle();}if(/^[rR]$/.test(e.key)){tl.pause(0);tl.play();}});
+if(Q.has('debug'))$('#ui').classList.add('on');
+tl.eventCallback('onComplete',()=>{tl.play(0);});
+const seek=t=>{tl.pause();tl.time(t,false);};
+window.OPENER={tl,DURATION,seek,ready:false};
+document.fonts.ready.then(()=>{window.OPENER.ready=true;if(!Q.has('clean'))tl.play(0);});
+setTimeout(()=>{if(!window.OPENER.ready){window.OPENER.ready=true;if(!Q.has('clean'))tl.play(0);}},3000);
+</script>
+</body>
+</html>
